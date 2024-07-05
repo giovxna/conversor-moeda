@@ -1,9 +1,16 @@
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import java.io.IOException;
+import java.net.URI;
 import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class CurrencyConverter {
+public class ConversorMoeda {
     private static final String API_KEY = "865314104ccf322e5d4abce6";
     private static final String API_URL = "https://v6.exchangerate-api.com/v6/" + API_KEY + "/latest/";
     private static final HttpClient client = HttpClient.newHttpClient();
@@ -82,6 +89,70 @@ public class CurrencyConverter {
             }
         }
         return amount;
+    }
+
+    private static double realizarConversao(int option, double amount) {
+        String fromCurrency = "";
+        String toCurrency = "";
+
+        switch (option) {
+            case 1:
+                fromCurrency = "USD";
+                toCurrency = "BRL";
+                break;
+            case 2:
+                fromCurrency = "BRL";
+                toCurrency = "USD";
+                break;
+            case 3:
+                fromCurrency = "EUR";
+                toCurrency = "BRL";
+                break;
+            case 4:
+                fromCurrency = "BRL";
+                toCurrency = "EUR";
+                break;
+            case 5:
+                fromCurrency = "ARS";
+                toCurrency = "BRL";
+                break;
+            case 6:
+                fromCurrency = "BRL";
+                toCurrency = "ARS";
+                break;
+            default:
+                System.out.println("Opção inválida. Tente novamente.");
+                return -1;
+        }
+
+        return convert(amount, fromCurrency, toCurrency);
+    }
+    private static boolean getRates(String baseCurrency) {
+        String url = API_URL + baseCurrency;
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .build();
+
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 200) {
+                Gson gson = new Gson();
+                JsonObject jsonResponse = gson.fromJson(response.body(), JsonObject.class);
+                JsonObject conversionRates = jsonResponse.getAsJsonObject("conversion_rates");
+                for (String currency : conversionRates.keySet()) {
+                    rates.put(currency, conversionRates.get(currency).getAsDouble());
+                }
+                return true;
+            } else {
+                System.out.println("Erro ao obter taxas de câmbio: " + response.statusCode());
+            }
+        } catch (IOException e) {
+            System.out.println("Erro de conexão: " + e.getMessage());
+        } catch (InterruptedException e) {
+            System.out.println("A conexão foi interrompida: " + e.getMessage());
+            Thread.currentThread().interrupt();
+        }
+        return false;
     }
 }
 
