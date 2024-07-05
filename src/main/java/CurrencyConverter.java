@@ -44,5 +44,44 @@ public class CurrencyConverter {
 
         scanner.close();
     }
+
+    private static void exibirMenu() {
+        System.out.println("Escolha a conversão desejada:");
+        System.out.println("1. Dólar para Real");
+        System.out.println("2. Real para Dólar");
+        System.out.println("3. Euro para Real");
+        System.out.println("4. Real para Euro");
+        System.out.println("5. Peso Argentino para Real");
+        System.out.println("6. Real para Peso Argentino");
+        System.out.println("0. Sair");
+    }
+
+    private static int obterOpcao(Scanner scanner) {
+        int option = -1;
+        while (option < 0 || option > 6) {
+            System.out.print("Digite a opção desejada: ");
+            if (scanner.hasNextInt()) {
+                option = scanner.nextInt();
+            } else {
+                System.out.println("Opção inválida. Tente novamente.");
+                scanner.next();
+            }
+        }
+        return option;
+    }
+
+    private static double obterValor(Scanner scanner) {
+        double amount = -1;
+        while (amount < 0) {
+            System.out.print("Digite o valor a ser convertido: ");
+            if (scanner.hasNextDouble()) {
+                amount = scanner.nextDouble();
+            } else {
+                System.out.println("Valor inválido. Tente novamente.");
+                scanner.next();
+            }
+        }
+        return amount;
+    }
 }
 
