@@ -132,7 +132,6 @@ public class ConversorMoeda {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .build();
-
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() == 200) {
@@ -154,5 +153,15 @@ public class ConversorMoeda {
         }
         return false;
     }
+    private static double convert(double amount, String fromCurrency, String toCurrency) {
+        if (rates.containsKey(fromCurrency) && rates.containsKey(toCurrency)) {
+            double rateFrom = rates.get(fromCurrency);
+            double rateTo = rates.get(toCurrency);
+            return amount * (rateTo / rateFrom);
+        }
+        return 0;
+    }
 }
+
+
 
