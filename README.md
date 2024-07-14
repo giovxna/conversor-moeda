@@ -1,6 +1,7 @@
 ## Currency Converter
 
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
+<img src="https://github.com/giovxna/currency-converter/blob/main/Badge-Conversor.png" width="150px" align="right">
 
 This is a simple currency converter application written in **Java**. It allows users to convert between different currencies based on live exchange rates fetched from an external API.
 
